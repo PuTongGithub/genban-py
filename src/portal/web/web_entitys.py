@@ -1,6 +1,6 @@
 import json
 from pydantic import BaseModel
-from ..hub.message.message import Message
+from ...hub.message.message import Message
 
 class TalkRequest(BaseModel):
     sessionId: str = ""

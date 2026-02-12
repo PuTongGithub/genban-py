@@ -1,9 +1,9 @@
 import traceback
 from fastapi import APIRouter
 from fastapi.responses import StreamingResponse
-from ..config.config import Config
+from ...config.config import Config
 from .web_entitys import *
-from ..hub.ai_hub import ai_hub
+from ...hub.ai_hub import ai_hub
 
 router = APIRouter(prefix="/api", tags=["web api"])
 
@@ -12,11 +12,11 @@ def getModels():
     return Config["hub"]["model_list"]
 
 @router.get("/new_session")
-def newSession():
+def newSession() -> str:
     return ai_hub.newSession()
 
 @router.post("/talk")
-async def talk(request: TalkRequest):
+async def talk(request: TalkRequest) -> StreamingResponse:
     def web_talk():
         try:
             res = ai_hub.talk(sessionId=request.sessionId, userInput=request.userInput, model=request.model)
