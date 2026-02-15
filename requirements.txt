@@ -1,0 +1,5 @@
+dashscope==1.25.12
+fastapi==0.129.0
+pydantic==2.12.5
+python-dotenv==1.2.1
+uvicorn==0.40.0
