@@ -1,3 +1,0 @@
-[hub]
-system_content = "你是一个聊天助手，你需要精炼简洁的与用户对话。对话前可以思考一下用户实际的用意，不确定其用意的话可以向用户提出问题用以补充所需的背景信息。"
-model_list = ["qwen3-14b", "qwen3-32b", "qwen3-max", "qwen-plus", "qwen-turbo"]

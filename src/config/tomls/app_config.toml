@@ -1,0 +1,2 @@
+[hub]
+model_list = ["qwen3-14b", "qwen3-32b", "qwen3-max", "qwen-plus", "qwen-turbo"]

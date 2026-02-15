@@ -1,8 +1,8 @@
-from ...config.config import Config
+from ...config.config import Prompts
 from .message import Message
     
 def createSystemMessage():
-    systemMessage = Message("system", Config["hub"]["system_content"])
+    systemMessage = Message("system", Prompts["system_content"])
     return systemMessage
 
 def createUserMessage(userInput):

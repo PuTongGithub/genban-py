@@ -1,7 +1,7 @@
 import traceback
 from fastapi import APIRouter
 from fastapi.responses import StreamingResponse
-from ...config.config import Config
+from ...config.config import AppConfig
 from .web_entitys import *
 from ...hub.ai_hub import ai_hub
 
@@ -9,7 +9,7 @@ router = APIRouter(prefix="/api", tags=["web api"])
 
 @router.get("/get_models")
 def getModels():
-    return Config["hub"]["model_list"]
+    return AppConfig["hub"]["model_list"]
 
 @router.get("/new_session")
 def newSession() -> str:

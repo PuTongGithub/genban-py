@@ -1,9 +1,9 @@
 import dashscope
-import os
+from ...config.config import getEnvConfig
 
 def call(model, messages):
     return dashscope.Generation.call(
-        api_key=os.getenv('DASHSCOPE_API_KEY'),
+        api_key=getEnvConfig('DASHSCOPE_API_KEY'),
         model=model,
         messages=messages,
         result_format='message',
