@@ -1,4 +1,4 @@
-from src.common.entities import Message, Chat
+from src.common.entities import Message, CallResponse
 
 def messageFormat(choice) -> Message:
     m = Message("assistant")
@@ -13,12 +13,12 @@ def messageFormat(choice) -> Message:
             m.tool_calls.append(t)
     return m
 
-def dashScopeResponseFormat(response) -> Chat:
-    chat = Chat()
+def dashScopeResponseFormat(response) -> CallResponse:
+    chat = CallResponse()
     chat.statusCode = response.status_code
     chat.totalTokens = response.usage.total_tokens
 
     choice = response.output.choices[0]
-    chat.finish_reason = choice.finish_reason
+    chat.finishReason = choice.finish_reason
     chat.message = messageFormat(choice)
     return chat

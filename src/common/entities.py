@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from .utils import time_util
 
 # 大模型消息实体
 @dataclass
@@ -10,8 +11,15 @@ class Message:
 
 # 大模型接口调用返回值统一封装
 @dataclass
-class Chat:
+class CallResponse:
     statusCode: int = 0
     totalTokens: int = 0
-    finish_reason: str = ""
+    finishReason: str = ""
     message: Message = None
+
+@dataclass
+class Chat:
+    totalTokens: int = 0
+    finishReason: str = ""
+    message: Message = None
+    time: str = time_util.getNowStr(time_util.STR_FORMATTER_WITH_MARKS)

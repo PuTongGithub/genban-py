@@ -4,7 +4,8 @@ ONE_MIN_SECOND = 60
 ONE_HOUR_SECOND = 60 * ONE_MIN_SECOND
 ONE_DAY_SECOND = 24 * ONE_HOUR_SECOND
 
-STR_FORMATTER_NO_MARKS = "%Y%m%d%H%M"
+STR_FORMATTER_NO_MARKS = "%Y%m%d%H%M%S"
+STR_FORMATTER_WITH_MARKS = "%Y-%m-%d %H:%M:%S"
 
 def getNow():
     return datetime.now()
