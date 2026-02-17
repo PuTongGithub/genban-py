@@ -9,9 +9,9 @@ class SessionManager:
         return TimeUtil.getNowStr(TimeUtil.STR_FORMATTER_NO_MARKS) + str(random.randint(1, 1000))
 
     def __init__(self):
-        self.sessions = {};
+        self.sessions = {}
     
-    def getHolder(self, sessionId):
+    def getHolder(self, sessionId) -> SessionHolder:
         holder = self.sessions[sessionId]
         if holder == None:
             raise SessionIdNotFoundException(f"sessionId:{sessionId}")

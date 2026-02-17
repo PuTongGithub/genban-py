@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-model="qwen3-32b"
+model="qwen3-14b"
 messages = [
     {'role':'system','content':'你是一个聊天助手，说话风格简洁而简短。'},
     {'role': 'user','content': '你是谁？'}
@@ -16,3 +16,4 @@ for r in responses:
     cs = r.output.choices
     for c in cs:
         print(c.message)
+        print(r.usage)

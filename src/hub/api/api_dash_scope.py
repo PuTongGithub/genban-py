@@ -8,5 +8,5 @@ def call(model, messages):
         messages=messages,
         result_format='message',
         stream=True,
-        incremental_output=True
+        incremental_output=False
     )

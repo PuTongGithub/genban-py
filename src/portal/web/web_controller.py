@@ -3,7 +3,7 @@ from fastapi import APIRouter
 from fastapi.responses import StreamingResponse
 from ...config.config import AppConfig
 from .web_entitys import *
-from ...hub.ai_hub import ai_hub
+from ...kernel.core.core import genban_core
 
 router = APIRouter(prefix="/api", tags=["web api"])
 
@@ -13,13 +13,13 @@ def getModels():
 
 @router.get("/new_session")
 def newSession() -> str:
-    return ai_hub.newSession()
+    return genban_core.newSession()
 
 @router.post("/talk")
 async def talk(request: TalkRequest) -> StreamingResponse:
     def web_talk():
         try:
-            res = ai_hub.talk(sessionId=request.sessionId, userInput=request.userInput, model=request.model)
+            res = genban_core.talk(sessionId=request.sessionId, userInput=request.userInput, model=request.model)
             for r in res:
                 yield adaptTalkResponse(r)
         except Exception as e:
