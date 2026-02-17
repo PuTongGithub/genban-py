@@ -1,5 +1,5 @@
 from ..session.session_manager import SessionManager
-from ...hub.hub import ai_hub
+from src.hub.hub import ai_hub
 import asyncio
 
 class _GenbanCore:

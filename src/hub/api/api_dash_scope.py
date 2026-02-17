@@ -1,5 +1,5 @@
 import dashscope
-from ...config.config import getEnvConfig
+from src.config.config import getEnvConfig
 
 def call(model, messages):
     return dashscope.Generation.call(

@@ -1,6 +1,6 @@
 from .api import api_dash_scope
 from .components import api_formatter, message_factory
-from .entities import Chat
+from src.common.entities import Chat
 
 class _AiHub:
 

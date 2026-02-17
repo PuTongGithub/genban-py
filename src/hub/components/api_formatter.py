@@ -1,4 +1,4 @@
-from ..entities import Message, Chat
+from src.common.entities import Message, Chat
 
 def messageFormat(choice) -> Message:
     m = Message("assistant")

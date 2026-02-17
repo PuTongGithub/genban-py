@@ -1,9 +1,9 @@
 import traceback
 from fastapi import APIRouter
 from fastapi.responses import StreamingResponse
-from ...config.config import AppConfig
+from src.config.config import AppConfig
 from .web_entitys import *
-from ...kernel.core.core import genban_core
+from src.kernel.core.core import genban_core
 
 router = APIRouter(prefix="/api", tags=["web api"])
 

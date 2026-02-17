@@ -1,5 +1,5 @@
-from ...config.config import Prompts
-from ..entities import Message
+from src.config.config import Prompts
+from src.common.entities import Message
     
 def createSystemMessage() -> Message:
     return Message(role="system", content=Prompts["system_content"])
