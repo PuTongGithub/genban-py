@@ -1,4 +1,4 @@
-from .session_exception import *
+from src.common.exceptions import SessionIdNotFoundException
 from src.common.utils import time_util as TimeUtil
 import random
 
@@ -10,23 +10,16 @@ class SessionManager:
     def __init__(self):
         self.chatsMap = {}
     
-    def newSession(self):
+    def newSession(self) -> str:
         id = SessionManager._createId()
         self.chatsMap[id] = []
         return id
     
-    def getChats(self, sessionId):
+    def getChats(self, sessionId: str) -> list[Chat]:
         chats = self.chatsMap[sessionId]
         if chats == None:
-            raise SessionIdNotFoundException(f"sessionId:{sessionId}")
+            raise SessionIdNotFoundException(sessionId)
         return chats
-
-    def getMessages(self, sessionId):
-        chats = self.getChats(sessionId=sessionId)
-        messages = []
-        for chat in chats:
-            messages.append(chat.message)
-        return messages
 
     def addChat(self, sessionId, newChat):
         self.getChats(sessionId=sessionId).append(newChat)

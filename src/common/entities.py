@@ -6,20 +6,22 @@ from .utils import time_util
 class Message:
     role: str = ""
     content: str = ""
-    reasoningContent: str = ""
-    toolCalls: list = None
+    reasoning_content: str = ""
+    tool_calls: list = None
+    tool_call_id: str = None
 
 # 大模型接口调用返回值统一封装
 @dataclass
 class CallResponse:
-    statusCode: int = 0
-    totalTokens: int = 0
-    finishReason: str = ""
+    status_code: int = 0
+    total_tokens: int = 0
+    finish_reason: str = ""
     message: Message = None
 
+# kernel模块针对对话内容的封装
 @dataclass
 class Chat:
-    totalTokens: int = 0
-    finishReason: str = ""
+    total_tokens: int = 0
+    is_tool_call: bool = False
     message: Message = None
     time: str = time_util.getNowStr(time_util.STR_FORMATTER_WITH_MARKS)

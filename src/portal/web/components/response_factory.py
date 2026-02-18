@@ -18,5 +18,5 @@ def adaptTalkResponse(chat : Chat):
     res = TalkResponse()
     res.role = chat.message.role
     res.content = chat.message.content
-    res.reasoning_content = chat.message.reasoningContent
+    res.reasoning_content = chat.message.reasoning_content
     return res.model_dump_json()

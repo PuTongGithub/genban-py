@@ -7,6 +7,9 @@ def createSystemMessage() -> Message:
 def createUserMessage(userInput) -> Message:
     return Message(role="user", content=userInput)
 
+def createToolMessage(toolCallId, toolResult) -> Message:
+    return Message(role="tool", tool_call_id=toolCallId, content=toolResult)
+
 def createChat(message : Message) -> Chat:
     chat = Chat()
     chat.message = message
@@ -17,6 +20,9 @@ def createSystemChat() -> Chat:
 
 def createUserInputChat(userInput) -> Chat:
     return createChat(createUserMessage(userInput=userInput))
+
+def createToolCallChat(toolCallId, toolResult) -> Chat:
+    return createChat(createToolMessage(toolCallId=toolCallId, toolResult=toolResult))
 
 # 根据是否是新用户和用户输入，创建用户输入的Chat列表
 def createUserInputChats(isNewUser, userInput) -> list:
@@ -29,19 +35,21 @@ def createUserInputChats(isNewUser, userInput) -> list:
 # 根据大模型返回的响应，创建响应的Chat对象
 def createResponseChat(response : CallResponse) -> Chat:
     chat = createChat(response.message)
-    chat.finishReason = response.finishReason
-    chat.totalTokens = response.totalTokens
+    chat.total_tokens = response.total_tokens
+    chat.is_tool_call = response.finish_reason == "tool_calls"
     return chat
 
-# 合并旧信息和用户输入，返回调用大模型的消息列表
-def buildMessages(oldMessages, userInputChats):
-    for chat in userInputChats:
-        oldMessages.append(chat.message)
-    return adaptMessages(oldMessages)
-
 # 转换消息列表为大模型调用的格式
-def adaptMessages(messages : list[Message]) -> list:
+def adaptMessages(chats : list[Chat]) -> list:
     ms = []
-    for m in messages:
-        ms.append(m.__dict__)
+    for chat in chats:
+        m = chat.message
+        mdict = {}
+        mdict["role"] = m.role
+        mdict["content"] = m.content
+        if m.tool_calls is not None:
+            mdict["tool_calls"] = m.tool_calls
+        if m.tool_call_id is not None:
+            mdict["tool_call_id"] = m.tool_call_id
+        ms.append(mdict)
     return ms

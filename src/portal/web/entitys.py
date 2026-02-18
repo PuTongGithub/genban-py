@@ -1,8 +1,8 @@
 from pydantic import BaseModel
 
 class TalkRequest(BaseModel):
-    sessionId: str = ""
-    userInput: str = ""
+    session_id: str = ""
+    user_input: str = ""
     model: str = ""
 
 class TalkResponse(BaseModel):
