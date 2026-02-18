@@ -6,8 +6,8 @@ from .utils import time_util
 class Message:
     role: str = ""
     content: str = ""
-    reasoning_content: str = ""
-    tool_calls: list = None
+    reasoningContent: str = ""
+    toolCalls: list = None
 
 # 大模型接口调用返回值统一封装
 @dataclass

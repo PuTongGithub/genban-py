@@ -1,16 +1,17 @@
 from src.common.entities import Message, CallResponse
 
 def messageFormat(choice) -> Message:
+    message = choice.message
     m = Message("assistant")
-    if 'content' in choice.message:
-        m.content = choice.message.content
-    if 'reasoning_content' in choice.message:
-        m.reasoning_content = choice.message.reasoning_content
-    if ('tool_calls' in choice.message) and (choice.message.tool_calls != None):
-        if (m.tool_calls == None):
-            m.tool_calls=[]
-        for t in choice.message.tool_calls:
-            m.tool_calls.append(t)
+    if 'content' in message:
+        m.content = message.content
+    if 'reasoning_content' in message:
+        m.reasoningContent = message.reasoning_content
+    if ('tool_calls' in message) and (message.tool_calls is not None):
+        if (m.toolCalls is None):
+            m.toolCalls=[]
+        for t in message.tool_calls:
+            m.toolCalls.append(t)
     return m
 
 def dashScopeResponseFormat(response) -> CallResponse:

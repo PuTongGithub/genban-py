@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from .portal.web import web_controller
+from .portal.web import controller
 
 app = FastAPI()
-app.include_router(web_controller.router)
+app.include_router(controller.router)

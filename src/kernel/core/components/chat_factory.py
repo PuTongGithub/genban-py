@@ -39,7 +39,8 @@ def buildMessages(oldMessages, userInputChats):
         oldMessages.append(chat.message)
     return adaptMessages(oldMessages)
 
-def adaptMessages(messages) -> list:
+# 转换消息列表为大模型调用的格式
+def adaptMessages(messages : list[Message]) -> list:
     ms = []
     for m in messages:
         ms.append(m.__dict__)

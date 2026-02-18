@@ -2,8 +2,9 @@ import traceback
 from fastapi import APIRouter
 from fastapi.responses import StreamingResponse
 from src.config.config import AppConfig
-from .web_entitys import *
+from .entitys import *
 from src.kernel.core.core import genban_core
+from .components import response_factory
 
 router = APIRouter(prefix="/api", tags=["web api"])
 
@@ -21,10 +22,11 @@ async def talk(request: TalkRequest) -> StreamingResponse:
         try:
             res = genban_core.talk(sessionId=request.sessionId, userInput=request.userInput, model=request.model)
             for r in res:
-                yield adaptTalkResponse(r)
+                yield response_factory.buildChatSSEContent(r)
+            yield response_factory.buildCompleteSSEContent()
         except Exception as e:
             traceback.print_exc()
-            yield errorTalkResponse(e)
+            yield response_factory.buildErrorSSEContent(e)
     return StreamingResponse(
         web_talk(),
         media_type="text/event-stream",

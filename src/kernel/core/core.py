@@ -10,7 +10,7 @@ class _GenbanCore:
     def newSession(self):
         return self.sessionManager.newSession()
 
-    def talk(self, sessionId, userInput, model):
+    def talk(self, sessionId, userInput, model) -> Chat:
         # 从会话管理器中获取旧消息，结合用户输入，构建调用大模型的消息列表
         oldMessages = self.sessionManager.getMessages(sessionId)
         userInputChats = chat_factory.createUserInputChats(isNewUser=len(oldMessages) == 0, userInput=userInput)
@@ -21,8 +21,8 @@ class _GenbanCore:
         lastChat = None
         for r in responses:
             lastChat = chat_factory.createResponseChat(r)
-            yield lastChat.message
-        # 如果最后一个Chat对象不为空，将其消息添加到会话管理器中
+            yield lastChat
+        # 如果最后一个Chat对象不为空，异步将本次对话内容添加到会话管理器中
         if lastChat is not None:
             asyncio.run(self.asyncAddChats(sessionId=sessionId, userInputChats=userInputChats, newChat=lastChat))
 
