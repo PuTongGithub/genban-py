@@ -9,3 +9,7 @@ class CallHubException(Exception):
 class CallHubLengthLimitedException(Exception):
     def __init__(self):
         super().__init__("call hub length limited")
+
+class ToolNotExistException(Exception):
+    def __init__(self, toolName: str):
+        super().__init__(f"tool:{toolName} not found")

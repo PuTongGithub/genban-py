@@ -1,8 +1,8 @@
 from ..session.session_manager import SessionManager
-from src.hub.hub import ai_hub
+from ..tools.tool_caller import tool_caller
 from .components import chat_factory
-from src.common.exceptions import CallHubException
 from src.common.entities import Chat
+from src.hub.hub import ai_hub
 
 # 大模型核心类，负责管理个人助理agent流程
 class _GenbanCore:
@@ -14,28 +14,34 @@ class _GenbanCore:
         return self.sessionManager.newSession()
 
     # 个人助理agent主流程，处理用户输入，返回流式输出
-    def talk(self, sessionId, userInput, model, tools=None) -> Chat:
+    def talk(self, sessionId, userInput, model) -> Chat:
         # 从会话管理器中获取对话列表
         chats = self.sessionManager.getChats(sessionId)
         # 构建用户输入消息列表
-        inputChats = chat_factory.createUserInputChats(isNewUser=len(chats) == 0, userInput=userInput)
+        inputChats = chat_factory.createUserInputChats(
+            isNewUser=len(chats) == 0, 
+            userInput=userInput
+        )
         # 执行循环，直到大模型不触发工具调用
         while True :
             chats.extend(inputChats)
-            assistantChat = yield from self._call(chats=chats, model=model, tools=tools)
+            assistantChat = yield from self._call(chats=chats, model=model)
             chats.append(assistantChat)
             if assistantChat.is_tool_call:
                 inputChats = self._handleToolCalls(assistantChat.message.tool_calls)
+                yield from inputChats
             else:
                 break
 
     # 调用大模型接口，获取流式输出，return值为最后一个输出的Chat对象
-    def _call(self, chats, model, tools=None) -> Chat:
-        responses = ai_hub.call(messages=chat_factory.adaptMessages(chats), model=model, tools=tools)
+    def _call(self, chats, model) -> Chat:
+        responses = ai_hub.call(
+            messages=chat_factory.adaptMessages(chats), 
+            model=model, 
+            tools=tool_caller.getTools()
+        )
         lastChat = None
         for r in responses:
-            if r.status_code != 200:
-                raise CallHubException(r.message)
             if r.finish_reason == "length":
                 raise CallHubLengthLimitedException()
             lastChat = chat_factory.createResponseChat(r)
@@ -47,9 +53,14 @@ class _GenbanCore:
         toolChats = []
         for toolCall in toolCalls:
             # 进行工具调用获取结果
-            toolResult = "" # todo
+            toolResult = tool_caller.callTool(toolCall)
             # 构建工具调用消息列表
-            toolChats.append(chat_factory.createToolCallChat(toolCallId=toolCall.id, toolResult=toolResult))
+            toolChats.append(
+                chat_factory.createToolCallChat(
+                    toolCallId=toolCall['id'], 
+                    toolResult=toolResult
+                )
+            )
         return toolChats
 
 genban_core = _GenbanCore()

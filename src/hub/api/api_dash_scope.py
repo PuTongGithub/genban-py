@@ -9,5 +9,6 @@ def call(model, messages, tools):
         tools=tools,
         result_format='message',
         stream=True,
-        incremental_output=False
+        incremental_output=False,
+        parallel_tool_calls=True
     )
