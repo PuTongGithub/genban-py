@@ -5,3 +5,4 @@ model_list = ["qwen3-14b", "qwen3-32b", "qwen3-max", "qwen-plus", "qwen-turbo"]
 read_file_path_whitelist = []
 write_file_path_whitelist = []
 shell_timeout = 120
+zhipu_search_engine = "search_std"

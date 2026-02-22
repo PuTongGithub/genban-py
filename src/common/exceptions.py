@@ -1,3 +1,7 @@
+class EnvConfigNotFoundException(Exception):
+    def __init__(self, key: str):
+        super().__init__(f"env config:{key} not found")
+
 class SessionIdNotFoundException(Exception):
     def __init__(self, sessionId: str):
         super().__init__(f"sessionId:{sessionId} not found")
@@ -13,3 +17,4 @@ class CallHubLengthLimitedException(Exception):
 class ToolNotExistException(Exception):
     def __init__(self, toolName: str):
         super().__init__(f"tool:{toolName} not found")
+

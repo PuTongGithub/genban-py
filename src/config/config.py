@@ -3,11 +3,15 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 from src.common.utils.path_util import get_app_dirs, get_user_dirs
+from src.common.exceptions import EnvConfigNotFoundException
 
 load_dotenv()
 
 def getEnvConfig(key: str) -> str:
-    return os.getenv(key)
+    str = os.getenv(key)
+    if not str:
+        raise EnvConfigNotFoundException(key)
+    return str
 
 prompts_path = Path(__file__).parent / "tomls/prompts.toml"
 with open(prompts_path, "rb") as file:

@@ -4,6 +4,7 @@ from .tools.impl.shell_tool import ShellTool
 from .tools.impl.read_file_tool import ReadFileTool
 from .tools.impl.write_file_tool import WriteFileTool
 from .tools.impl.edit_file_tool import EditFileTool
+from .tools.impl.web_search_tool import WebSearchTool
 
 # 工具调用类，实现统一的工具调用接口
 class ToolCaller:
@@ -16,6 +17,7 @@ class ToolCaller:
         self._registerTool(ReadFileTool())
         self._registerTool(WriteFileTool())
         self._registerTool(EditFileTool())
+        self._registerTool(WebSearchTool())
 
     # 注册工具类
     def _registerTool(self, tool: Tool):
