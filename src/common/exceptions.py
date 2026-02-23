@@ -18,3 +18,7 @@ class ToolNotExistException(Exception):
     def __init__(self, toolName: str):
         super().__init__(f"tool:{toolName} not found")
 
+class ModelNotFoundException(Exception):
+    def __init__(self, modelName: str):
+        super().__init__(f"model:{modelName} not found")
+

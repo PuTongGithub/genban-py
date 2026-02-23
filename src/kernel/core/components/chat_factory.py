@@ -7,6 +7,9 @@ def createSystemMessage() -> Message:
 def createUserMessage(userInput) -> Message:
     return Message(role="user", content=userInput)
 
+def createAssistantMessage(content) -> Message:
+    return Message(role="assistant", content=content)
+
 def createToolMessage(toolCallId, toolResult) -> Message:
     return Message(role="tool", tool_call_id=toolCallId, content=toolResult)
 
@@ -21,8 +24,13 @@ def createSystemChat() -> Chat:
 def createUserInputChat(userInput) -> Chat:
     return createChat(createUserMessage(userInput=userInput))
 
+def createAssistantChat(content) -> Chat:
+    return createChat(createAssistantMessage(content=content))
+
 def createToolCallChat(toolCallId, toolResult) -> Chat:
-    return createChat(createToolMessage(toolCallId=toolCallId, toolResult=toolResult))
+    chat = createChat(createToolMessage(toolCallId=toolCallId, toolResult=toolResult))
+    print(chat)
+    return chat
 
 # 根据是否是新用户和用户输入，创建用户输入的Chat列表
 def createUserInputChats(isNewUser, userInput) -> list:
@@ -30,6 +38,7 @@ def createUserInputChats(isNewUser, userInput) -> list:
     if isNewUser:
         chats.append(createSystemChat())
     chats.append(createUserInputChat(userInput=userInput))
+    print(chats)
     return chats
 
 # 根据大模型返回的响应，创建响应的Chat对象

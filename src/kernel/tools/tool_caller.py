@@ -5,6 +5,7 @@ from .tools.impl.read_file_tool import ReadFileTool
 from .tools.impl.write_file_tool import WriteFileTool
 from .tools.impl.edit_file_tool import EditFileTool
 from .tools.impl.web_search_tool import WebSearchTool
+import traceback
 
 # 工具调用类，实现统一的工具调用接口
 class ToolCaller:
@@ -30,12 +31,16 @@ class ToolCaller:
 
     # 执行工具调用，返回调用结果
     def callTool(self, toolCall) -> str:
-        function = toolCall['function']
-        name = function['name']
-        arguments = json_util.fromJson(function['arguments'])
-        tool = self.toolsMap.get(name)
-        if tool is None:
-            raise ToolNotExistException(name)
-        return tool.call(arguments)
+        try:
+            function = toolCall['function']
+            name = function['name']
+            arguments = json_util.fromJson(function['arguments'])
+            tool = self.toolsMap.get(name)
+            if tool is None:
+                raise ToolNotExistException(name)
+            return tool.call(arguments)
+        except Exception as e:
+            traceback.print_exc()
+            return f"工具调用失败，错误信息：{str(e)}"
 
 tool_caller = ToolCaller()

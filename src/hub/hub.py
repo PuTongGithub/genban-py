@@ -8,9 +8,8 @@ class _AiHub:
     def __init__(self):
         pass
 
-    # 调用大模型接口，返回结果非增量型流式输出（即最后一次流式输出结果为完整结果）
-    def call(self, messages, model, tools) -> CallResponse:
-        responses = api_dash_scope.call(model=model, messages=messages, tools=tools)
+    def call(self, messages, model, tools, enableThinking) -> CallResponse:
+        responses = api_dash_scope.call(model=model, messages=messages, tools=tools, enableThinking=enableThinking)
         for r in responses:
             if r.status_code != 200:
                 raise CallHubException(str(r))

@@ -20,7 +20,7 @@ def newSession() -> str:
 async def talk(request: TalkRequest) -> StreamingResponse:
     def web_talk():
         try:
-            res = genban_core.talk(sessionId=request.session_id, userInput=request.user_input, model=request.model)
+            res = genban_core.talk(sessionId=request.session_id, userInput=request.user_input)
             for r in res:
                 yield response_factory.buildChatSSEContent(r)
             yield response_factory.buildCompleteSSEContent()

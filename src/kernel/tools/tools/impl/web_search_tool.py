@@ -10,7 +10,7 @@ class WebSearchTool(Tool):
 
     @property
     def description(self) -> str:
-        return "联网搜索工具，用于搜索互联网上的实时信息。当需要获取联网查询的内容时，或出现不确定答案的信息时使用。"
+        return "联网搜索工具，用于搜索互联网上的实时信息。当对话主题具有实时性的时候务必使用。当对话内容中包含你不确定的信息时务必使用。"
 
     @property
     def parameters(self) -> dict:
@@ -37,8 +37,8 @@ class WebSearchTool(Tool):
 
     def call(self, arguments: dict) -> str:
         query = arguments["query"]
-        count = arguments["count"]
-        recency = arguments["recency"]
+        count = arguments.get("count", 10)
+        recency = arguments.get("recency", "noLimit")
         result = web_search(
             search_query=query,
             count=count,

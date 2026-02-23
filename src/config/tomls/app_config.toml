@@ -1,5 +1,5 @@
 [hub]
-model_list = ["qwen3-14b", "qwen3-32b", "qwen3-max", "qwen-plus", "qwen-turbo"]
+model_list = ["qwen3-14b", "qwen3-32b", "qwen3-max-2026-01-23","qwen-plus", "qwen-turbo"]
 
 [tools]
 read_file_path_whitelist = []
