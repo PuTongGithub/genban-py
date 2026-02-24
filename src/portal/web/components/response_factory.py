@@ -16,7 +16,10 @@ def buildChatSSEContent(chat : Chat) -> str:
 
 def adaptTalkResponse(chat : Chat):
     res = TalkResponse()
+    res.source = chat.source
+    res.id = chat.id
     res.role = chat.message.role
     res.content = chat.message.content
     res.reasoning_content = chat.message.reasoning_content
+    res.tool_calls = chat.message.tool_calls
     return res.model_dump_json()

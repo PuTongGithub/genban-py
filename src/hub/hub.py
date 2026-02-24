@@ -9,11 +9,16 @@ class _AiHub:
     def __init__(self):
         pass
 
-    def call(self, messages, model, tools, enableThinking) -> CallResponse:
+    def call(self, chats, model, tools, enableThinking) -> CallResponse:
         modelConfig = app_config.getModelConfig(model)
         if modelConfig is None:
             raise ModelNotFoundException(model)
-        responses = api_dash_scope.call(model=modelConfig["id"], messages=messages, tools=tools, enableThinking=enableThinking) 
+        responses = api_dash_scope.call(
+            model=modelConfig["id"], 
+            messages=api_formatter.adaptMessages(chats), 
+            tools=tools, 
+            enableThinking=enableThinking
+        )
         for r in responses:
             if r.status_code != 200:
                 raise CallHubException(str(r))

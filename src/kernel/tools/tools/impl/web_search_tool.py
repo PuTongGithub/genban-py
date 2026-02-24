@@ -24,12 +24,12 @@ class WebSearchTool(Tool):
                 "count": {
                     "type": "integer",
                     "enum": [10, 20, 30, 40, 50],
-                    "description": "返回结果数量，可选值为10、20、30、40、50，默认10"
+                    "description": "返回结果数量，默认10"
                 },
                 "recency": {
                     "type": "string",
                     "enum": ["oneDay", "oneWeek", "oneMonth", "oneYear", "noLimit"],
-                    "description": "时间过滤：oneDay(一天内)、oneWeek(一周内)、oneMonth(一个月内)、oneYear(一年内)、noLimit(不限，默认)"
+                    "description": "时间过滤，默认noLimit"
                 }
             },
             "required": ["query"]

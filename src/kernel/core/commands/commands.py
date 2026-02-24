@@ -15,9 +15,9 @@ _COMMANDS = {
     "/模型：": "model",
 }
 
-# 逐个处理用户输入中包含的指令，返回处理结果字符串以及去掉指令的用户输入
-def handleCommand(sessionState: SessionState, userInput: str) -> tuple[str, str]:
-    commandResult = ""
+# 逐个处理用户输入中包含的指令，返回处理结果字符串列表以及去掉指令的用户输入
+def handleCommand(sessionState: SessionState, userInput: str) -> tuple[list[str], str]:
+    commandResults = []
     while True:
         userInput = userInput.strip()
         matched = False
@@ -33,7 +33,7 @@ def handleCommand(sessionState: SessionState, userInput: str) -> tuple[str, str]
                     sessionState.deep_thinking = False
                     userInput = remaining
                 elif cmdType == "status":
-                    commandResult = _handleStatus(sessionState)
+                    commandResults.append(_handleStatus(sessionState))
                     userInput = remaining
                 elif cmdType == "model":
                     parts = remaining.split(None, 1)
@@ -45,7 +45,7 @@ def handleCommand(sessionState: SessionState, userInput: str) -> tuple[str, str]
         if not matched:
             break
     
-    return commandResult, userInput
+    return commandResults, userInput
 
 def _handleModelSwitch(sessionState: SessionState, modelName: str):
     modelName = modelName.strip()

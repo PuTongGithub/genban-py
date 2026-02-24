@@ -20,9 +20,9 @@ class _GenbanCore:
         state = self.sessionManager.getState(sessionId)
         chats = self.sessionManager.getChats(sessionId)
         # 识别用户输入的指令，提取并执行
-        commandResult, userInput = commands.handleCommand(state, userInput)
-        if len(commandResult) > 0:
-            yield chat_factory.createAssistantChat(commandResult)
+        commandResults, userInput = commands.handleCommand(state, userInput)
+        if len(commandResults) > 0:
+            yield from chat_factory.createCommandChats(commandResults)
         # 如果用户输入为空，则直接返回
         userInput = userInput.strip()
         if not userInput:
@@ -37,8 +37,7 @@ class _GenbanCore:
             chats.extend(inputChats)
             assistantChat = yield from self._call(chats=chats, model=state.model, enableThinking=state.deep_thinking)
             chats.append(assistantChat)
-            if assistantChat.is_tool_call:
-                print(assistantChat.message.tool_calls)
+            if assistantChat.message.tool_calls is not None:
                 inputChats = self._handleToolCalls(assistantChat.message.tool_calls)
                 yield from inputChats
             else:
@@ -47,7 +46,7 @@ class _GenbanCore:
     # 调用大模型接口，获取流式输出，return值为最后一个输出的Chat对象
     def _call(self, chats, model, enableThinking) -> Chat:
         responses = ai_hub.call(
-            messages=chat_factory.adaptMessages(chats), 
+            chats=chats, 
             model=model, 
             tools=tool_caller.getTools(),
             enableThinking=enableThinking
@@ -56,7 +55,7 @@ class _GenbanCore:
         for r in responses:
             if r.finish_reason == "length":
                 raise CallHubLengthLimitedException()
-            lastChat = chat_factory.createResponseChat(r)
+            lastChat = chat_factory.createAssistantChat(r)
             yield lastChat
         return lastChat
 
@@ -68,7 +67,7 @@ class _GenbanCore:
             toolResult = tool_caller.callTool(toolCall)
             # 构建工具调用消息列表
             toolChats.append(
-                chat_factory.createToolCallChat(
+                chat_factory.createToolChat(
                     toolCallId=toolCall['id'], 
                     toolResult=toolResult
                 )
