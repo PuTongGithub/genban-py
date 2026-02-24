@@ -1,4 +1,4 @@
-from src.config.config import AppConfig
+from src.config.config import app_config
 from src.common.exceptions import ModelNotFoundException
 from src.kernel.session.session_manager import SessionState
 
@@ -49,8 +49,7 @@ def handleCommand(sessionState: SessionState, userInput: str) -> tuple[str, str]
 
 def _handleModelSwitch(sessionState: SessionState, modelName: str):
     modelName = modelName.strip()
-    modelList = AppConfig["hub"]["model_list"]
-    if modelName not in modelList:
+    if app_config.getModelConfig(modelName) is None:
         raise ModelNotFoundException(modelName)
     sessionState.model = modelName
 

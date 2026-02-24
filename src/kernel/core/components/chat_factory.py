@@ -1,8 +1,8 @@
-from src.config.config import Prompts
+from src.config.config import prompts
 from src.common.entities import Message, Chat, CallResponse
     
 def createSystemMessage() -> Message:
-    return Message(role="system", content=Prompts["system_content"])
+    return Message(role="system", content=prompts.get("system_content"))
 
 def createUserMessage(userInput) -> Message:
     return Message(role="user", content=userInput)

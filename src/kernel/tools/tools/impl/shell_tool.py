@@ -1,7 +1,7 @@
 from ..tool import Tool
 import subprocess
 from src.common.utils import sys_util
-from src.config.config import AppConfig
+from src.config.config import app_config
 
 # 命令行执行工具
 class ShellTool(Tool):
@@ -38,7 +38,7 @@ class ShellTool(Tool):
     def call(self, arguments: dict) -> str:
         command = arguments["command"]
         cwd = arguments.get("cwd", None)
-        timeout = AppConfig["tools"]["shell_timeout"]
+        timeout = app_config.get("tools")["shell_timeout"]
         try:
             result = subprocess.run(
                 command, 

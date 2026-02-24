@@ -1,16 +1,11 @@
 import traceback
 from fastapi import APIRouter
 from fastapi.responses import StreamingResponse
-from src.config.config import AppConfig
 from .entitys import *
 from src.kernel.core.core import genban_core
 from .components import response_factory
 
 router = APIRouter(prefix="/api", tags=["web api"])
-
-@router.get("/get_models")
-def getModels():
-    return AppConfig["hub"]["model_list"]
 
 @router.get("/new_session")
 def newSession() -> str:
