@@ -13,9 +13,10 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
-from src.storage.database import engine
-from src.storage.models import User, UserState
+from src.storage.sqlite.database import engine
+from src.storage.sqlite.models import User, UserState
 from sqlalchemy import inspect
+from src.storage.sqlite.database import SessionLocal
 
 
 def get_tables():
@@ -26,7 +27,6 @@ def get_tables():
 
 def view_users():
     # 查看用户表
-    from src.storage.database import SessionLocal
     db = SessionLocal()
     try:
         users = db.query(User).all()

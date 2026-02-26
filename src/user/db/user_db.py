@@ -1,6 +1,6 @@
 from typing import Optional
-from src.storage.database import db_execute, db_query
-from src.storage.models import User
+from src.storage.sqlite.database import db_execute, db_query
+from src.storage.sqlite.models import User
 from src.common.utils import time_util
 
 

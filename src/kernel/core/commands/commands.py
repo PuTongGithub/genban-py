@@ -1,6 +1,6 @@
 from src.config.config import appConfig
 from src.common.exceptions import ModelNotFoundException
-from src.storage.models import UserState
+from src.storage.sqlite.models import UserState
 
 # 指令定义：键为指令前缀，值为处理类型
 _COMMANDS = {
