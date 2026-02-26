@@ -1,68 +1,61 @@
-from ..session.session_manager import SessionManager
-from ..tools.tool_caller import tool_caller
-from .components import chat_factory
+from ..tools.tool_caller import toolCaller
+from ..conversation.components.chat_factory import chatFactory
+from ..conversation.conversation_manager import conversationHolder
 from .commands import commands
 from src.common.entities import Chat
-from src.hub.hub import ai_hub
+from src.hub.hub import aiHub
+from src.user.user_manager import userManager
 
 # 大模型核心类，负责管理个人助理agent流程
 class _GenbanCore:
-    def __init__(self):
-        self.sessionManager = SessionManager()
-
-    # 创建新会话，返回sessionId
-    def newSession(self) -> str:
-        return self.sessionManager.newSession()
 
     # 个人助理agent主流程，处理用户输入，返回流式输出
-    def talk(self, sessionId, userInput):
-        state = self.sessionManager.getState(sessionId)
-
+    def talk(self, userId, userInput):
+        # 从用户管理器中获取用户状态
+        state = userManager.getState(userId)
         # 识别用户输入的指令，提取并执行
         userInput = yield from self._handleCommand(state, userInput)
-        
         # 如果用户输入为空，则直接返回
         if not userInput:
             return
-            
-        # 从会话管理器中获取对话状态和对话列表
-        chats = self.sessionManager.getChats(sessionId)
-        # 构建用户输入消息列表
-        inputChats = chat_factory.createUserInputChats(
-            isNewUser=len(chats) == 0, 
-            userInput=userInput
-        )
-        # 执行循环，直到大模型不触发工具调用
+
+        # 从对话管理器中获取用户对话对象
+        conversation = conversationHolder.getConversation(userId, userInput)
+        # 执行循环，直到大模型不再触发工具调用
         while True :
-            chats.extend(inputChats)
-            assistantChat = yield from self._call(chats=chats, model=state.model, enableThinking=state.deep_thinking)
-            chats.append(assistantChat)
+            assistantChat = yield from self._call(chats=conversation.chats, model=state.model, enableThinking=state.deep_thinking)
+            conversation.append(assistantChat)
             if assistantChat.message.tool_calls is not None:
                 inputChats = self._handleToolCalls(assistantChat.message.tool_calls)
+                conversation.extend(inputChats)
                 yield from inputChats
             else:
                 break
+        # 结束对话
+        conversation.finishTalk()
 
-    # 处理用户输入中的指令，返回处理结果字符串列表以及去掉指令的用户输入
+    # 处理用户输入包含的指令，返回处理结果字符串列表以及去掉指令的用户输入
     def _handleCommand(self, state, userInput) -> str:
-        commandResults, userInput = commands.handleCommand(state, userInput)
+        commandResults, userInput, stateChanged = commands.handleCommand(state, userInput)
         if len(commandResults) > 0:
-            yield from chat_factory.createCommandChats(commandResults)
+            yield from chatFactory.createCommandChats(commandResults)
+        if stateChanged:
+            userManager.updateState(state)
         return userInput
 
     # 调用大模型接口，获取流式输出，return值为最后一个输出的Chat对象
     def _call(self, chats, model, enableThinking) -> Chat:
-        responses = ai_hub.call(
+        responses = aiHub.call(
             chats=chats, 
             model=model, 
-            tools=tool_caller.getTools(),
+            tools=toolCaller.getTools(),
             enableThinking=enableThinking
         )
         lastChat = None
         for r in responses:
             if r.finish_reason == "length":
                 raise CallHubLengthLimitedException()
-            lastChat = chat_factory.createAssistantChat(r)
+            lastChat = chatFactory.createAssistantChat(r)
             yield lastChat
         return lastChat
 
@@ -71,14 +64,14 @@ class _GenbanCore:
         toolChats = []
         for toolCall in toolCalls:
             # 进行工具调用获取结果
-            toolResult = tool_caller.callTool(toolCall)
+            toolResult = toolCaller.callTool(toolCall)
             # 构建工具调用消息列表
             toolChats.append(
-                chat_factory.createToolChat(
+                chatFactory.createToolChat(
                     toolCallId=toolCall['id'], 
                     toolResult=toolResult
                 )
             )
         return toolChats
 
-genban_core = _GenbanCore()
+genbanCore = _GenbanCore()

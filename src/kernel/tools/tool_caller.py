@@ -43,4 +43,4 @@ class ToolCaller:
             traceback.print_exc()
             return f"工具调用失败，错误信息：{str(e)}"
 
-tool_caller = ToolCaller()
+toolCaller = ToolCaller()

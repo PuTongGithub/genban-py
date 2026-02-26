@@ -1,6 +1,6 @@
 from ..tool import Tool
 from pathlib import Path
-from src.config.config import app_config
+from src.config.config import appConfig
 from src.common.utils.path_util import validate_path
 
 class WriteFileTool(Tool):
@@ -33,7 +33,7 @@ class WriteFileTool(Tool):
     def call(self, arguments: dict) -> str:
         file_path = arguments["file_path"]
         content = arguments["content"]
-        if not validate_path(file_path, app_config.get("tools")["write_file_path_whitelist"]):
+        if not validate_path(file_path, appConfig.get("tools")["write_file_path_whitelist"]):
             return "文件路径不在白名单内"
         try:
             Path(file_path).write_text(content, encoding="utf-8")

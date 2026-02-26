@@ -1,6 +1,6 @@
 from ..tool import Tool
 from pathlib import Path
-from src.config.config import app_config
+from src.config.config import appConfig
 from src.common.utils.path_util import validate_path
 from src.common.utils.json_util import toJson
 
@@ -29,7 +29,7 @@ class ReadFileTool(Tool):
 
     def call(self, arguments: dict) -> str:
         file_path = arguments["file_path"]
-        if not validate_path(file_path, app_config.get("tools")["read_file_path_whitelist"]):
+        if not validate_path(file_path, appConfig.get("tools")["read_file_path_whitelist"]):
             return "文件路径不在白名单内"
         path = Path(file_path)
         # 读取所有行（保留原始换行符）

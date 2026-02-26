@@ -2,7 +2,7 @@ from .api import api_dash_scope
 from .components import api_formatter
 from src.common.entities import CallResponse
 from src.common.exceptions import CallHubException, ModelNotFoundException
-from src.config.config import app_config
+from src.config.config import appConfig
 
 class _AiHub:
 
@@ -10,7 +10,7 @@ class _AiHub:
         pass
 
     def call(self, chats, model, tools, enableThinking) -> CallResponse:
-        modelConfig = app_config.getModelConfig(model)
+        modelConfig = appConfig.getModelConfig(model)
         if modelConfig is None:
             raise ModelNotFoundException(model)
         responses = api_dash_scope.call(
@@ -25,4 +25,4 @@ class _AiHub:
             m = api_formatter.dashScopeResponseFormat(r)
             yield m
         
-ai_hub = _AiHub()
+aiHub = _AiHub()

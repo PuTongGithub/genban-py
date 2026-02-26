@@ -1,9 +1,9 @@
 import dashscope
-from src.config.config import env_config
+from src.config.config import envConfig
 
 def call(model, messages, tools, enableThinking):
     kwargs = {
-        'api_key': env_config.get('DASHSCOPE_API_KEY'),
+        'api_key': envConfig.get('DASHSCOPE_API_KEY'),
         'model': model,
         'messages': messages,
         'tools': tools,

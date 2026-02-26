@@ -1,6 +1,6 @@
-from src.config.config import app_config
+from src.config.config import appConfig
 from src.common.exceptions import ModelNotFoundException
-from src.kernel.session.session_manager import SessionState
+from src.storage.models import UserState
 
 # 指令定义：键为指令前缀，值为处理类型
 _COMMANDS = {
@@ -16,8 +16,9 @@ _COMMANDS = {
 }
 
 # 逐个处理用户输入中包含的指令，返回处理结果字符串列表以及去掉指令的用户输入
-def handleCommand(sessionState: SessionState, userInput: str) -> tuple[list[str], str]:
+def handleCommand(state: UserState, userInput: str) -> tuple[list[str], str, bool]:
     commandResults = []
+    stateChanged = False
     while True:
         userInput = userInput.strip()
         matched = False
@@ -27,33 +28,36 @@ def handleCommand(sessionState: SessionState, userInput: str) -> tuple[list[str]
                 remaining = userInput[len(prefix):]
                 
                 if cmdType == "open_think":
-                    sessionState.deep_thinking = True
+                    state.deep_thinking = True
                     userInput = remaining
+                    stateChanged = True
                 elif cmdType == "close_think":
-                    sessionState.deep_thinking = False
+                    state.deep_thinking = False
                     userInput = remaining
+                    stateChanged = True
                 elif cmdType == "status":
-                    commandResults.append(_handleStatus(sessionState))
+                    commandResults.append(_handleStatus(state))
                     userInput = remaining
                 elif cmdType == "model":
                     parts = remaining.split(None, 1)
                     modelName = parts[0] if parts else ""
-                    _handleModelSwitch(sessionState, modelName)
+                    _handleModelSwitch(state, modelName)
                     userInput = remaining[len(modelName):]
+                    stateChanged = True
                 break
         
         if not matched:
             break
     
-    return commandResults, userInput.strip()
+    return commandResults, userInput.strip(), stateChanged
 
-def _handleModelSwitch(sessionState: SessionState, modelName: str):
+def _handleModelSwitch(state: UserState, modelName: str):
     modelName = modelName.strip()
-    if app_config.getModelConfig(modelName) is None:
+    if appConfig.getModelConfig(modelName) is None:
         raise ModelNotFoundException(modelName)
-    sessionState.model = modelName
+    state.model = modelName
 
-def _handleStatus(sessionState: SessionState) -> str:
-    deepThinkingStatus = "开启" if sessionState.deep_thinking else "关闭"
-    result = f"当前配置：\n- 模型：{sessionState.model}\n- 深度思考：{deepThinkingStatus}"
+def _handleStatus(state: UserState) -> str:
+    deepThinkingStatus = "开启" if state.deep_thinking else "关闭"
+    result = f"当前配置：\n- 模型：{state.model}\n- 深度思考：{deepThinkingStatus}"
     return result

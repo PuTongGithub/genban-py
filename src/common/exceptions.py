@@ -2,9 +2,9 @@ class EnvConfigNotFoundException(Exception):
     def __init__(self, key: str):
         super().__init__(f"env config:{key} not found")
 
-class SessionIdNotFoundException(Exception):
-    def __init__(self, sessionId: str):
-        super().__init__(f"sessionId:{sessionId} not found")
+class UserIdNotFoundException(Exception):
+    def __init__(self, userId: str):
+        super().__init__(f"userId:{userId} not found")
 
 class CallHubException(Exception):
     def __init__(self, message: str):
@@ -21,4 +21,19 @@ class ToolNotExistException(Exception):
 class ModelNotFoundException(Exception):
     def __init__(self, modelName: str):
         super().__init__(f"model:{modelName} not found")
+
+
+class UserNotFoundException(Exception):
+    def __init__(self, userId: str):
+        super().__init__(f"user:{userId} not found")
+
+
+class InvalidPasswordException(Exception):
+    def __init__(self):
+        super().__init__("invalid password")
+
+
+class UnauthorizedException(Exception):
+    def __init__(self):
+        super().__init__("unauthorized")
 

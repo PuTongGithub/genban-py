@@ -26,6 +26,6 @@ class Chat:
     id: str = ""    # 对话id，唯一键，升序排列
     override_id_begin: str = None   # 覆盖起始id（包含），用当前Chat覆盖之前的对话内容
     override_id_end: str = None   # 覆盖结束id（包含），用当前Chat覆盖之前的对话内容
-    time: str = time_util.getTimestamp()    # 对话时间，时间戳格式
+    time: int = time_util.getTimestamp()    # 对话时间，秒级时间戳
     message: Message = None # 对话内容
     total_tokens: int = 0   # 本次调用消耗的token数（仅source=assistant时有效）

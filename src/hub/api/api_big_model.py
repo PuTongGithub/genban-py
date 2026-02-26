@@ -1,11 +1,11 @@
 import requests
-from src.config.config import app_config, env_config
+from src.config.config import appConfig, envConfig
 
 ZHIPU_WEB_SEARCH_URL = "https://open.bigmodel.cn/api/paas/v4/web_search"
 
 def web_search(search_query: str, count: int = 10, search_recency_filter: str = "noLimit") -> dict:
-    api_key = env_config.get('ZHIPU_API_KEY')
-    search_engine = app_config.get("tools")["zhipu_search_engine"]
+    api_key = envConfig.get('ZHIPU_API_KEY')
+    search_engine = appConfig.get("tools")["zhipu_search_engine"]
     
     headers = {
         "Authorization": f"Bearer {api_key}",

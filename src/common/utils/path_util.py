@@ -13,7 +13,7 @@ from platformdirs import (
 )
 
 APP_NAME = "genban"
-APP_AUTHOR = "DIY"
+APP_AUTHOR = "genban"
 
 def get_path(path_str) -> Path:
     p = Path(path_str)
