@@ -22,8 +22,10 @@ class CallResponse:
 # kernel模块针对对话内容的封装
 @dataclass
 class Chat:
-    source: str = ""    # 对话来源: prompt, user, assistant, tool, command
-    id: str = ""
-    total_tokens: int = 0
-    message: Message = None
-    time: str = time_util.getNowStr(time_util.STR_FORMATTER_WITH_MARKS)
+    source: str = ""    # 对话来源: prompt, user, assistant, tool, command, memory
+    id: str = ""    # 对话id，唯一键，升序排列
+    override_id_begin: str = None   # 覆盖起始id（包含），用当前Chat覆盖之前的对话内容
+    override_id_end: str = None   # 覆盖结束id（包含），用当前Chat覆盖之前的对话内容
+    time: str = time_util.getTimestamp()    # 对话时间，时间戳格式
+    message: Message = None # 对话内容
+    total_tokens: int = 0   # 本次调用消耗的token数（仅source=assistant时有效）

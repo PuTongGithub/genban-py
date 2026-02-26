@@ -16,17 +16,17 @@ class _GenbanCore:
 
     # 个人助理agent主流程，处理用户输入，返回流式输出
     def talk(self, sessionId, userInput):
-        # 从会话管理器中获取对话状态和对话列表
         state = self.sessionManager.getState(sessionId)
-        chats = self.sessionManager.getChats(sessionId)
+
         # 识别用户输入的指令，提取并执行
-        commandResults, userInput = commands.handleCommand(state, userInput)
-        if len(commandResults) > 0:
-            yield from chat_factory.createCommandChats(commandResults)
+        userInput = yield from self._handleCommand(state, userInput)
+        
         # 如果用户输入为空，则直接返回
-        userInput = userInput.strip()
         if not userInput:
             return
+            
+        # 从会话管理器中获取对话状态和对话列表
+        chats = self.sessionManager.getChats(sessionId)
         # 构建用户输入消息列表
         inputChats = chat_factory.createUserInputChats(
             isNewUser=len(chats) == 0, 
@@ -42,6 +42,13 @@ class _GenbanCore:
                 yield from inputChats
             else:
                 break
+
+    # 处理用户输入中的指令，返回处理结果字符串列表以及去掉指令的用户输入
+    def _handleCommand(self, state, userInput) -> str:
+        commandResults, userInput = commands.handleCommand(state, userInput)
+        if len(commandResults) > 0:
+            yield from chat_factory.createCommandChats(commandResults)
+        return userInput
 
     # 调用大模型接口，获取流式输出，return值为最后一个输出的Chat对象
     def _call(self, chats, model, enableThinking) -> Chat:

@@ -45,7 +45,7 @@ def handleCommand(sessionState: SessionState, userInput: str) -> tuple[list[str]
         if not matched:
             break
     
-    return commandResults, userInput
+    return commandResults, userInput.strip()
 
 def _handleModelSwitch(sessionState: SessionState, modelName: str):
     modelName = modelName.strip()
