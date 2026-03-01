@@ -20,7 +20,8 @@ class _ChatFactory:
         return Message(role=MessageRole.SYSTEM.value, content=content)
 
     def createUserMessage(self, userId, userInput) -> Message:
-        return Message(role=MessageRole.USER.value, content=f"[user:{userId}]"+userInput)
+        time = time_util.getNowStr(time_util.STR_FORMATTER_WITH_MARKS)
+        return Message(role=MessageRole.USER.value, content=f"[user:{userId}:{time}]"+userInput)
 
     def createToolMessage(self, toolCallId, toolResult) -> Message:
         return Message(role=MessageRole.TOOL.value, tool_call_id=toolCallId, content=toolResult)

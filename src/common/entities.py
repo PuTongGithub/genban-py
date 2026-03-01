@@ -41,18 +41,19 @@ class Chat:
 
 @unique
 class ChatType(Enum):
-    PROMPT = ("prompt", False, True)
-    USER = ("user", False, True)
-    ASSISTANT = ("assistant", True, True)
-    TOOL = ("tool", True, True)
-    COMMAND = ("command", True, False)
-    MEMORY = ("memory", False, True)
-    TOOL_SUMMARY = ("toolSummary", False, True)
-    ERROR = ("error", True, False)
+    PROMPT = ("prompt", False, True, False)
+    USER = ("user", False, True, True)
+    ASSISTANT = ("assistant", True, True, False)
+    TOOL = ("tool", True, True, False)
+    COMMAND = ("command", True, False, False)
+    MEMORY = ("memory", False, True, True)
+    TOOL_SUMMARY = ("toolSummary", False, True, False)
+    ERROR = ("error", True, False, False)
 
-    def __init__(self, value: str, userVisible: bool, assistantVisible: bool):
+    def __init__(self, value: str, userVisible: bool, assistantVisible: bool, messageWithTag: bool):
         self._value_ = value
         self.userVisible = userVisible
         self.assistantVisible = assistantVisible
+        self.messageWithTag = messageWithTag
 
 chatTypeMap = {chatType.value: chatType for chatType in ChatType}
