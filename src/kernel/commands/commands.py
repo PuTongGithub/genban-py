@@ -15,7 +15,7 @@ _COMMANDS = {
     "/模型：": "model",
 }
 
-# 逐个处理用户输入中包含的指令，返回处理结果字符串列表以及去掉指令的用户输入
+# 逐个处理用户输入中包含的指令，返回去掉指令的用户输入和指令结果列表
 def handleCommand(state: UserState, userInput: str) -> tuple[list[str], str, bool]:
     commandResults = []
     stateChanged = False

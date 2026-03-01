@@ -35,4 +35,4 @@ class ReadFileTool(Tool):
         # 读取所有行（保留原始换行符）
         with open(path, 'r', encoding='utf-8') as f:
             lines = f.readlines()
-        return toJson(lines)
+        return toJson(lines.__dict__)

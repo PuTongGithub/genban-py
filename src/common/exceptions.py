@@ -32,8 +32,14 @@ class InvalidPasswordException(Exception):
     def __init__(self):
         super().__init__("invalid password")
 
-
 class UnauthorizedException(Exception):
     def __init__(self):
         super().__init__("unauthorized")
 
+class ConversationClosedException(Exception):
+    def __init__(self):
+        super().__init__("conversation closed")
+
+class SubmitCommandChatsException(Exception):
+    def __init__(self):
+        super().__init__("submit command chats failed")

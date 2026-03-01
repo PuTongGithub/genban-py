@@ -31,7 +31,7 @@ tools = [
     }
 ]
 
-responses = ADS.call(model=model, messages=messages, tools=tools)
+responses = ADS.call(model=model, messages=messages, tools=tools, enableThinking=True)
 
 for r in responses:
     print("------")

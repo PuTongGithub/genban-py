@@ -1,5 +1,5 @@
 from dataclasses import asdict
-from typing import List
+from typing import List, Optional
 from collections import defaultdict
 
 from src.storage.file_storage import fileStorage
@@ -25,7 +25,7 @@ class _MemoryManager:
             fileStorage.appendToJsonl(filePath, records)
 
     # 从文件系统读取指定时间范围内的 Chat 记录, 默认读取24小时内的记录
-    def getChats(self, userId: str, startTime: int = None, endTime: int = None) -> List[Chat]:
+    def getChats(self, userId: str, startTime: Optional[int] = None, endTime: Optional[int] = None) -> List[Chat]:
         if startTime is None:
             startTime = time_util.getYesterdayTimestamp()
         if endTime is None:

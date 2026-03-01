@@ -1,6 +1,6 @@
 from typing import Optional
-from src.storage.sqlite.database import db_execute, db_query
-from src.storage.sqlite.models import UserState
+from ..database import db_execute, db_query
+from ..models import UserState
 from src.common.utils import time_util
 
 
@@ -15,7 +15,8 @@ class _UserStateDb:
                 user_id=user_id,
                 deep_thinking=deep_thinking,
                 model=model,
-                updated_at=time_util.getTimestamp()
+                updated_at=time_util.getTimestamp(),
+                current_chat_id=""
             )
             db.add(state)
             return True
@@ -44,26 +45,6 @@ class _UserStateDb:
     def get_by_token(self, db, token: str) -> Optional[UserState]:
         # 根据 token 查询用户状态
         return db.query(UserState).filter(UserState.token == token).first()
-
-    @db_execute
-    def clear_token(self, db, user_id: str) -> bool:
-        # 清除用户 token
-        state = db.query(UserState).filter(UserState.user_id == user_id).first()
-        if state:
-            state.token = None
-            state.token_expires_at = None
-            state.updated_at = time_util.getTimestamp()
-            return True
-        return False
-
-    @db_execute
-    def delete_by_user_id(self, db, user_id: str) -> bool:
-        # 删除用户状态
-        state = db.query(UserState).filter(UserState.user_id == user_id).first()
-        if state:
-            db.delete(state)
-            return True
-        return False
 
 
 userStateDb = _UserStateDb()

@@ -12,8 +12,8 @@ project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
 from src.config.config import appConfig
-from src.user.db.user_db import userDb
-from src.user.db.user_state_db import userStateDb
+from src.storage.sqlite.db.user_db import userDb
+from src.storage.sqlite.db.user_state_db import userStateDb
 from src.user.components.password_util import hashPassword
 
 

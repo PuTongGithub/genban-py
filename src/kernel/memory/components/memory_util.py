@@ -23,7 +23,7 @@ def getChatFilePath(userId: str, date: str) -> Path:
 def dictToChat(data: dict) -> Chat:
     # 字典转 Chat 对象
     chat = Chat()
-    chat.source = data.get("source", "")
+    chat.type = data.get("type", "")
     chat.id = data.get("id", "")
     chat.override_id_begin = data.get("override_id_begin")
     chat.override_id_end = data.get("override_id_end")

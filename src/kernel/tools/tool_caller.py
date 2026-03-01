@@ -1,5 +1,6 @@
 from src.common.utils import json_util
 from src.common.exceptions import ToolNotExistException
+from .tools.tool import Tool
 from .tools.impl.shell_tool import ShellTool
 from .tools.impl.read_file_tool import ReadFileTool
 from .tools.impl.write_file_tool import WriteFileTool

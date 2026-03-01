@@ -3,8 +3,8 @@ import secrets
 from src.common.exceptions import UserNotFoundException, InvalidPasswordException, UnauthorizedException
 from src.common.utils import time_util
 from src.storage.sqlite.models import UserState
-from .db.user_db import userDb
-from .db.user_state_db import userStateDb
+from src.storage.sqlite.db.user_db import userDb
+from src.storage.sqlite.db.user_state_db import userStateDb
 from .components.password_util import verifyPassword
 
 class _UserManager:

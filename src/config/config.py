@@ -45,16 +45,6 @@ class _AppConfig:
 
     def getModelConfig(self, model: str) -> dict:
         return self.config["models"].get(model)
-
-class _Prompts:
-    def __init__(self):
-        prompts_path = Path(__file__).parent / "jsons/prompts.json"
-        with open(prompts_path, "r", encoding="utf-8") as file:
-            self.config = json.load(file)
-    
-    def get(self, key: str) -> str:
-        return self.config.get(key)
     
 envConfig = _EnvConfig()
 appConfig = _AppConfig()
-prompts = _Prompts()
